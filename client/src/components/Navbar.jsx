@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { motion, useScroll } from "framer-motion";
+import { motion, useScroll , useMotionValueEvent } from "framer-motion";
 import { Menu, X, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NotificationDropdown from "./NotificationDropdown";
 import { useNotifications } from "@/context/NotificationContext";
 import { logout, isLoggedIn } from "../utils/auth";
 import { toast } from "sonner";
+
 import axios from "axios";
 
 export default function Navbar() {
@@ -15,17 +16,19 @@ export default function Navbar() {
   const { scrollY } = useScroll();
 
   const [notifications, setNotifications] = useState([]);
-  const [showNotifications, setShowNotifications] = useState(false);
+ 
   const [loggedIn, setLoggedIn] = useState(isLoggedIn());
   const [open, setOpen] = useState(false);
   const { friendRequests } = useNotifications();
+  const { scrollY } = useScroll();
+
   const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => {
-    return scrollY.onChange((y) => {
-      setScrolled(y > 40);
-    });
-  }, [scrollY]);
+ useMotionValueEvent(scrollY, "change", (latest) => {
+  setScrolled(latest > 40);
+});
+
+ 
 
   useEffect(() => {
     setLoggedIn(isLoggedIn());
@@ -39,14 +42,16 @@ export default function Navbar() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get(
-          "http://localhost:5000/api/notifications",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+       const API = import.meta.env.VITE_API_URL;
+
+     const res = await axios.get( `${API}/notifications`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
+
 
         setNotifications(res.data);
       } catch (err) {
