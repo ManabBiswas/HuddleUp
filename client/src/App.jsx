@@ -23,6 +23,7 @@ import Footer from './components/Footer';
 import AllPosts from './components/AllPosts';
 import CreatePost from './components/CreatePost';
 import BackToTopBtn from './components/BackToTopBtn';
+import { NotificationProvider } from './context/NotificationContext';
 
 function AppContent() {
   const location = useLocation();
@@ -70,9 +71,6 @@ function AppContent() {
     </div>
   );
 }
-
-import { NotificationProvider } from './context/NotificationContext';
-import Feedback from './pages/Feedback';
 
 export default function App() {
   return (

@@ -16,11 +16,11 @@ export default function Navbar() {
   const { scrollY } = useScroll();
 
   const [notifications, setNotifications] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
  
   const [loggedIn, setLoggedIn] = useState(isLoggedIn());
   const [open, setOpen] = useState(false);
   const { friendRequests } = useNotifications();
-  const { scrollY } = useScroll();
 
   const [scrolled, setScrolled] = useState(false);
 
